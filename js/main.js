@@ -1,4 +1,3 @@
-
 new Vue({
     el: '#app',
     data: {
@@ -10,7 +9,10 @@ new Vue({
         cardDesc: '',
         deadline: '',
         addDesc: '',
-        timeout: ''
+        timeout: '',
+        updatedData: '',
+        updatedDesc: '',
+        updatedTime: '',
     },
     methods: {
         addCard() {
@@ -21,13 +23,25 @@ new Vue({
                 deadline: this.deadline,
                 addDesc: this.addDesc,
                 timeout: this.timeout,
-                completedDate: ''
+                completedDate: '',
+                updated: false,
+                updatedData: ''
             };
             this.plannedTasks.push(newCard);
             this.resetForm();
+            newCard.createdDate = new Date().toLocaleString();
         },
         removeCard(taskList, card) {
             taskList.splice(taskList.indexOf(card), 1);
+        },
+        editCard(card) {
+            card.updated = true;
+        },
+        updatedCard(card, text, date) {
+            card.description = text;
+            card.deadline = date;
+            card.updatedData = new Date().toLocaleString();
+            card.updated = false;
         },
         cardMove(card, destination) {
             const sourceList = this.findSourceList(card);

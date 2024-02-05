@@ -3,8 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
     <link rel="stylesheet" href="css/style.css">
     <title>Канбан-Доска</title>
 </head>
@@ -24,55 +22,82 @@
         <button type="submit">Добавить задачу</button>
     </form>
 
-
     <div class="kanban-board">
         <div class="column">
             <h2>Запланированные задачи</h2>
-            <div v-for="card in plannedTasks" :key="card.id">
+            <div class="kanban-card" v-for="card in plannedTasks" :key="card.id">
                 <div>
-                    <strong>{{ card.title }}</strong>
-                    <p>{{ card.description }}</p>
-                    <p>Дедлайн: {{ card.deadline }}</p>
+                    <p><strong>Задача:</strong>{{ card.title }}</p>
+                    <p><strong>Описание:</strong> {{ card.description }}</p>
+                    <p><strong>Дедлайн:</strong> {{ card.deadline }}</p>
+                    <p><strong>Дата создания:</strong> {{ card.createdDate }}</p>
+                    <div v-if="card.updated">
+                        <label>Введите новое описание:</label>
+                        <input v-model="updatedDesc">
+                        <label>Назначте новую дату сдачи:</label>
+                        <input type="date" v-model="updatedData">
+                        <button @click="updatedCard(card, updatedDesc, updatedData)">Сохранить изменения</button>
+                    </div>
                     <button @click="removeCard(plannedTasks, card)">Удалить</button>
                     <button @click="cardMove(card, 'inProgress')">В работу</button>
+                    <button @click="editCard(card)">Редактировать</button>
+                    <div v-if="card.updatedData">Отредактировано: {{ card.updatedData }}</div>
                 </div>
             </div>
         </div>
 
         <div class="column">
             <h2>Задачи в работе</h2>
-            <div v-for="card in inProgressTasks" :key="card.id">
+            <div class="kanban-card" v-for="card in inProgressTasks" :key="card.id">
                 <div>
-                    <strong>{{ card.title }}</strong>
-                    <p>{{ card.description }}</p>
-                    <p>Дедлайн: {{ card.deadline }}</p>
-                    <button @click="removeCard(inProgressTasks, card)">Удалить</button>
+                    <p><strong>Задача:</strong>{{ card.title }}</p>
+                    <p><strong>Описание:</strong> {{ card.description }}</p>
+                    <p><strong>Дедлайн:</strong> {{ card.deadline }}</p>
+                    <p><strong>Дата создания:</strong> {{ card.createdDate }}</p>
+                    <div v-if="card.updated">
+                        <label>Введите новое описание:</label>
+                        <input v-model="updatedDesc">
+                        <label>Назначте новую дату сдачи:</label>
+                        <input type="date" v-model="updatedData">
+                        <button @click="updatedCard(card, updatedDesc, updatedData)">Сохранить изменения</button>
+                    </div>
                     <button @click="cardMove(card, 'testing')">В тестирование</button>
+                    <button @click="editCard(card)">Редактировать</button>
+                    <div v-if="card.updatedData">Отредактировано: {{ card.updatedData }}</div>
                 </div>
             </div>
         </div>
 
         <div class="column">
             <h2>Тестирование</h2>
-            <div v-for="card in testingTasks" :key="card.id">
+            <div class="kanban-card" v-for="card in testingTasks" :key="card.id">
                 <div>
-                    <strong>{{ card.title }}</strong>
-                    <p>{{ card.description }}</p>
-                    <p>Дедлайн: {{ card.deadline }}</p>
-                    <button @click="removeCard(testingTasks, card)">Удалить</button>
+                    <p><strong>Задача:</strong>{{ card.title }}</p>
+                    <p><strong>Описание:</strong> {{ card.description }}</p>
+                    <p><strong>Дедлайн:</strong> {{ card.deadline }}</p>
+                    <p><strong>Дата создания:</strong> {{ card.createdDate }}</p>
+                    <div v-if="card.updated">
+                        <label>Введите новое описание:</label>
+                        <input v-model="updatedDesc">
+                        <label>Назначте новую дату сдачи:</label>
+                        <input type="date" v-model="updatedData">
+                        <button @click="updatedCard(card, updatedDesc, updatedData)">Сохранить изменения</button>
+                    </div>
                     <button @click="cardMove(card, 'completed')">Завершить</button>
+                    <button @click="editCard(card)">Редактировать</button>
+                    <div v-if="card.updatedData">Отредактировано: {{ card.updatedData }}</div>
                 </div>
             </div>
         </div>
 
         <div class="column">
             <h2>Выполненные задачи</h2>
-            <div v-for="card in completedTasks" :key="card.id">
+            <div class="kanban-card" v-for="card in completedTasks" :key="card.id">
                 <div>
-                    <strong>{{ card.title }}</strong>
-                    <p>{{ card.description }}</p>
-                    <p>Дедлайн: {{ card.deadline }}</p>
-                    <button @click="removeCard(completedTasks, card)">Удалить</button>
+                    <p><strong>Задача:</strong>{{ card.title }}</p>
+                    <p><strong>Описание:</strong> {{ card.description }}</p>
+                    <p><strong>Дедлайн:</strong> {{ card.deadline }}</p>
+                    <p><strong>Дата создания:</strong> {{ card.createdDate }}</p>
                 </div>
             </div>
         </div>
