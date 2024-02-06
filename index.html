@@ -41,6 +41,9 @@
                     <button @click="removeCard(plannedTasks, card)">Удалить</button>
                     <button @click="cardMove(card, 'inProgress')">В работу</button>
                     <button @click="editCard(card)">Редактировать</button>
+                    <div v-if="card.updated && card.isEditing">
+                        <button @click="cancelEdit(card)">Отменить</button>
+                    </div>
                     <div v-if="card.updatedData">Отредактировано: {{ card.updatedData }}</div>
                 </div>
             </div>
@@ -54,6 +57,9 @@
                     <p><strong>Описание:</strong> {{ card.description }}</p>
                     <p><strong>Дедлайн:</strong> {{ card.deadline }}</p>
                     <p><strong>Дата создания:</strong> {{ card.createdDate }}</p>
+                    <div v-if="card.returnReason">
+                        <p><strong>Причина возврата в работу:</strong> {{ card.returnReason }}</p>
+                    </div>
                     <div v-if="card.updated">
                         <label>Введите новое описание:</label>
                         <input v-model="updatedDesc">
@@ -63,6 +69,9 @@
                     </div>
                     <button @click="cardMove(card, 'testing')">В тестирование</button>
                     <button @click="editCard(card)">Редактировать</button>
+                    <div v-if="card.updated && card.isEditing">
+                        <button @click="cancelEdit(card)">Отменить</button>
+                    </div>
                     <div v-if="card.updatedData">Отредактировано: {{ card.updatedData }}</div>
                 </div>
             </div>
@@ -84,7 +93,14 @@
                         <button @click="updatedCard(card, updatedDesc, updatedData)">Сохранить изменения</button>
                     </div>
                     <button @click="cardMove(card, 'completed')">Завершить</button>
+                        <label for="returnReason">Причина возврата в работу:</label>
+                        <input v-model="card.returnReason" type="text" id="returnReason" required>
+                        <button @click="returnToInProgress(card)">Вернуть в работу</button>
+                        <span v-if="card.returnErrorMessage" style="color: red">{{ card.returnErrorMessage }}</span>
                     <button @click="editCard(card)">Редактировать</button>
+                    <div v-if="card.updated && card.isEditing">
+                        <button @click="cancelEdit(card)">Отменить</button>
+                    </div>
                     <div v-if="card.updatedData">Отредактировано: {{ card.updatedData }}</div>
                 </div>
             </div>

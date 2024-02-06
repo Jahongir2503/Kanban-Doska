@@ -36,6 +36,13 @@ new Vue({
         },
         editCard(card) {
             card.updated = true;
+            card.originalData = {description: card.description, deadline: card.deadline};
+            card.isEditing = true;
+        },
+        cancelEdit(card) {
+            card.updated = false;
+            card.description = card.originalData.description;
+            card.deadline = card.originalData.deadline;
         },
         updatedCard(card, text, date) {
             card.description = text;
@@ -55,6 +62,7 @@ new Vue({
                     this.testingTasks.push(card);
                 } else if (destination === 'completed') {
                     this.completedTasks.push(card);
+                    this.completeCard(card);
                 }
             }
         },
@@ -76,6 +84,26 @@ new Vue({
             this.deadline = '';
             this.addDesc = '';
             this.timeout = '';
+        },
+        returnToInProgress(card) {
+            if (card.returnReason) {
+                this.testingTasks.splice(this.testingTasks.indexOf(card), 1);
+                this.inProgressTasks.push(card);
+                card.returnReasonInput = false;
+            } else {
+                card.returnErrorMessage = 'Введите причину возврата в работу';
+            }
+
         }
-    }
+    },
+    completeCard(card) {
+        const dateNow = new Date().getTime();
+        const dateCompleted = new Date(card.deadline).getTime();
+
+        if (dateCompleted >= dateNow) {
+            card.timeout = 'Выполнено в срок';
+        } else {
+            card.timeout = 'Просроченно';
+        }
+    },
 });
