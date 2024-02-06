@@ -13,8 +13,17 @@ new Vue({
         updatedData: '',
         updatedDesc: '',
         updatedTime: '',
+        addTask: this,
+        errors: '',
     },
     methods: {
+        openTask() {
+            this.addTask = true;
+
+        },
+        closeTask() {
+            this.addTask = false;
+        },
         addCard() {
             const newCard = {
                 id: Date.now(),
@@ -30,7 +39,21 @@ new Vue({
             this.plannedTasks.push(newCard);
             this.resetForm();
             newCard.createdDate = new Date().toLocaleString();
+            this.closeTask();
+            if (this.title === '') {
+                this.error = 'Загаловок должен быть заполнен обязательно';
+                return;
+            } else if (this.description === '') {
+                this.error = 'Описания должно присуствовать';
+                return;
+            } else if (this.deadline === '') {
+                this.error = 'Вы не устоновили  ДедЛайн'
+                return;
+            }
+            this.error = '';
         },
+
+
         removeCard(taskList, card) {
             taskList.splice(taskList.indexOf(card), 1);
         },
@@ -103,7 +126,11 @@ new Vue({
         if (dateCompleted >= dateNow) {
             card.timeout = 'Выполнено в срок';
         } else {
-            card.timeout = 'Просроченно';
+            card.timeout = 'Просрочено';
         }
-    },
+
+        this.completedTasks.push(card);
+        console.log(card);
+    }
+
 });

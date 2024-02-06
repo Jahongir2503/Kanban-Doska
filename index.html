@@ -9,19 +9,23 @@
 <body>
 <div id="app" class="header">
     <h1> Канбан-Доска</h1>
-    <form @submit.prevent="addCard">
-        <label for="taskTitle">Заголовок:</label>
-        <input v-model="cardTitle" type="text" id="taskTitle" required>
+    <button @click.prevent="openTask">Добавить задачу</button>
+    <form @submit.prevent="addCard" v-if="addTask" class="overlay">
+        <div class="popup">
+            <p>{{errors}}</p>
+            <label for="taskTitle">Заголовок:</label>
+            <input v-model="cardTitle" type="text" id="taskTitle" required>
 
-        <label for="taskDescription">Описание задачи:</label>
-        <input v-model="cardDesc" type="text" id="taskDescription" required>
+            <label for="taskDescription">Описание задачи:</label>
+            <input v-model="cardDesc" type="text" id="taskDescription" required>
 
-        <label for="taskDeadline">Дедлайн:</label>
-        <input v-model="deadline" type="date" id="taskDeadline" required>
+            <label for="taskDeadline">Дедлайн:</label>
+            <input v-model="deadline" type="date" id="taskDeadline" required>
 
-        <button type="submit">Добавить задачу</button>
+            <button type="submit" >Добавить задачу</button>
+            <button @click="closeTask">Отмена</button>
+        </div>
     </form>
-
     <div class="kanban-board">
         <div class="column">
             <h2>Запланированные задачи</h2>
@@ -93,10 +97,10 @@
                         <button @click="updatedCard(card, updatedDesc, updatedData)">Сохранить изменения</button>
                     </div>
                     <button @click="cardMove(card, 'completed')">Завершить</button>
-                        <label for="returnReason">Причина возврата в работу:</label>
-                        <input v-model="card.returnReason" type="text" id="returnReason" required>
-                        <button @click="returnToInProgress(card)">Вернуть в работу</button>
-                        <span v-if="card.returnErrorMessage" style="color: red">{{ card.returnErrorMessage }}</span>
+                    <label for="returnReason">Причина возврата в работу:</label>
+                    <input v-model="card.returnReason" type="text" id="returnReason" required>
+                    <button @click="returnToInProgress(card)">Вернуть в работу</button>
+                    <span v-if="card.returnErrorMessage" style="color: red">{{ card.returnErrorMessage }}</span>
                     <button @click="editCard(card)">Редактировать</button>
                     <div v-if="card.updated && card.isEditing">
                         <button @click="cancelEdit(card)">Отменить</button>
@@ -114,6 +118,7 @@
                     <p><strong>Описание:</strong> {{ card.description }}</p>
                     <p><strong>Дедлайн:</strong> {{ card.deadline }}</p>
                     <p><strong>Дата создания:</strong> {{ card.createdDate }}</p>
+                    <p><strong>Статус:</strong> {{ card.timeout }}</p>
                 </div>
             </div>
         </div>
